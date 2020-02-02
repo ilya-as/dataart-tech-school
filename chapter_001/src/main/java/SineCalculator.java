@@ -13,18 +13,14 @@ public class SineCalculator {
     }
 
     public double calculateSine(double x, int addendNumber) {
-        double result = 0.0;
-        double numerator = 1D;
+        double result = x;
+        double numerator = x;
         double denominator = 1D;
         for (int currentAdded = 2; currentAdded <= addendNumber; currentAdded++) {
-            numerator = numerator * x;
-            denominator *= (currentAdded - 1);
-            if ((currentAdded - 1) % 4 == 1) {
-                result += numerator / denominator;
-            }
-            if ((currentAdded - 1) % 4 == 3) {
-                result -= numerator / denominator;
-            }
+            numerator = numerator * x * x;
+            denominator *= (currentAdded * 2 - 2) * (currentAdded * 2 - 1);
+            numerator *= -1;
+            result += numerator / denominator;
         }
         return result;
     }
