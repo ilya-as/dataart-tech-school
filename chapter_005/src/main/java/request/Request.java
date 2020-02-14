@@ -1,7 +1,7 @@
 package request;
 
-import java.util.UUID;
 import java.io.InputStream;
+import java.util.Map;
 import java.util.HashMap;
 
 public class Request {
@@ -9,17 +9,19 @@ public class Request {
     private String method;
     private InputStream body;
     private String pathToFolder;
-    HashMap<String, String> metadata;
-    HashMap<String, String> cookie;
+    private Map<String, String> metadata;
+    private Map<String, String> cookie = new HashMap<>();
 
     public Request() {
     }
 
-    public Request(String resource, String method, InputStream body, HashMap<String, String> metadata, String pathToFolder) {
+    public Request(String resource, String method, InputStream body, Map<String, String> metadata,
+                   Map<String, String> cookie, String pathToFolder) {
         this.resource = resource;
         this.method = method;
         this.body = body;
         this.metadata = metadata;
+        this.cookie = cookie;
         this.pathToFolder = pathToFolder;
     }
 
@@ -27,8 +29,8 @@ public class Request {
         return resource;
     }
 
-    public void  getConnectionUUID(){
-        //if cookie.containsKey("")UUID
+    public String getCookie(String cookieKey) {
+        return cookie.get(cookieKey);
     }
 
     public String getFullPatch() {

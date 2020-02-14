@@ -7,6 +7,7 @@ import responce.Response;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -25,7 +26,7 @@ public class HttpHandler {
     }
 
     public void handle(Request request, Response response) {
-        FileInputStream fileInputStream = null;
+        InputStream fileInputStream = null;
         String pathToFile = request.getFullPatch();
         if (ServerUtils.isFileExist(pathToFile)) {
             try {
@@ -45,8 +46,8 @@ public class HttpHandler {
         response.setProtocol(HTTP_PROTOCOL);
         response.addHeader(HEADER_CONTENT_TYPE, VALUE_CONTENT_TYPE);
         response.addHeader(HEADER_DATE, Instant.now().toString());
-     /*   if (request.getCookie("user_id")=null{
-            response.addNewCookie("user_id",UUID.randomUUID());
-        }*/
+         if (request.getCookie(ServerUtils.COOKIE_KEY) == null) {
+            response.addCookie(ServerUtils.COOKIE_KEY, UUID.randomUUID().toString());
+        }
     }
 }

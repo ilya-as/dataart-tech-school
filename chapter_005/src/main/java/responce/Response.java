@@ -4,15 +4,21 @@ import utils.ServerUtils;
 
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Response {
     private String protocol;
     private int status;
     private String statusMessage;
-    private HashMap<String, String> metadata = new HashMap<>();
     private InputStream resource;
+    private Map<String, String> metadata = new HashMap<>();
+    private Map<String, String> cookie = new HashMap<>();
 
     public Response() {
+    }
+
+    public void addCookie(String cookieKey, String cookieValue) {
+        cookie.put(cookieKey, cookieValue);
     }
 
     public void addHeader(String key, String value) {
@@ -51,7 +57,12 @@ public class Response {
             buffer.append(entry.getKey() + ServerUtils.REGEX_PATTERN_COLON_SPACE
                     + entry.getValue() + ServerUtils.REQUEST_HEADERS_END_LINE);
         }
-        buffer.append("Set-Cookie: userID=14");
+        if (cookie.containsKey(ServerUtils.COOKIE_KEY)) {
+            buffer.append(ServerUtils.REGEX_PATTERN_SET_COOKE
+                    + ServerUtils.COOKIE_KEY
+                    + ServerUtils.REGEX_PATTERN_EQUAL
+                    + cookie.get(ServerUtils.COOKIE_KEY));
+        }
         buffer.append(ServerUtils.REQUEST_HEADERS_END_LINE);
         return buffer.toString();
     }
