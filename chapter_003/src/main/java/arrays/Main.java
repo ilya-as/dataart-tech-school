@@ -1,3 +1,5 @@
+package arrays;
+
 public class Main {
     private final int ARRAY_LENGTH = 10;
 
