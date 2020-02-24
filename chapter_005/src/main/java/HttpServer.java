@@ -2,9 +2,9 @@ import java.util.UUID;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import request.Request;
 import request.RequestReader;
 import responce.Response;
@@ -14,9 +14,9 @@ import utils.HttpHandler;
 public class HttpServer {
     private String pathToFolder;
     private int serverPort;
-    private static final Logger LOG = LogManager.getLogger(HttpServer.class.getName());
+    private static final Logger LOG = Logger.getLogger(HttpServer.class.getName());
     private final String MESSAGE_SERVER_STARTED = "Server started on port: ";
-    private final String MESSAGE_GOT_CONNECTION = "Got connection %s";
+    private final String MESSAGE_GOT_CONNECTION = "Got connection UUID: %s";
     private final String MESSAGE_CONNECTION_CLOSED = "Connection closed %s";
 
     public HttpServer(String pathToFolder, int serverPort) {
@@ -26,13 +26,13 @@ public class HttpServer {
 
     public void startServer() {
         try (ServerSocket serverSocket = new ServerSocket(serverPort)) {
-            LOG.info(MESSAGE_SERVER_STARTED +  serverSocket.getLocalPort());
+            LOG.info(MESSAGE_SERVER_STARTED + serverSocket.getLocalPort());
             while (true) {
                 try (Socket socket = serverSocket.accept()) {
                     UUID connectionId = UUID.randomUUID();
                     LOG.info(String.format(MESSAGE_GOT_CONNECTION, connectionId));
                     RequestReader requestReader = new RequestReader();
-                    Request request = requestReader.readRequest(socket.getInputStream(),pathToFolder);
+                    Request request = requestReader.readRequest(socket.getInputStream(), pathToFolder);
                     Response response = new Response();
                     HttpHandler httpHandler = new HttpHandler();
                     httpHandler.handle(request, response);
@@ -42,7 +42,7 @@ public class HttpServer {
                 }
             }
         } catch (IOException e) {
-            LOG.warn(e.getMessage());
+            LOG.log(Level.WARNING, e.getMessage());
         }
     }
 }

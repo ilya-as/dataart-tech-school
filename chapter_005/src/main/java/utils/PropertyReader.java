@@ -1,8 +1,8 @@
 package utils;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -15,8 +15,8 @@ public class PropertyReader {
     private final String PROPERTY_PATH_TO_FOLDER = "PATH_TO_FOLDER";
     private final String PROPERTY_SERVER_PORT = "SERVER_PORT";
     private final String MESSAGE_ERROR_PORT = "Ошибка чтения значения порта сервера!";
-    private final String MESSAGE_ERROR_PROPERTY_FILE = "Файл настроек %s не обнаружен!";
-    private static final Logger LOG = LogManager.getLogger(PropertyReader.class.getName());
+    private final String MESSAGE_ERROR_PROPERTY_FILE = "Ошибка чтения файла настроек %s не обнаружен!";
+    private static final Logger LOG = Logger.getLogger(PropertyReader.class.getName());
 
     public PropertyReader(String fileProperties) {
         this.fileProperties = fileProperties;
@@ -36,13 +36,14 @@ public class PropertyReader {
         Properties prop = new Properties();
         try {
             FileInputStream fileInputStream = new FileInputStream(file);
+            LogManager.getLogManager().readConfiguration(fileInputStream);
             prop.load(fileInputStream);
-            pathToFolder = prop.getProperty(PROPERTY_PATH_TO_FOLDER);
-            serverPort = Integer.parseInt(prop.getProperty(PROPERTY_SERVER_PORT));
+            pathToFolder = LogManager.getLogManager().getProperty(PROPERTY_PATH_TO_FOLDER);
+            serverPort = Integer.parseInt(LogManager.getLogManager().getProperty(PROPERTY_SERVER_PORT));
         } catch (IOException e) {
-            LOG.warn(String.format(MESSAGE_ERROR_PROPERTY_FILE, fileProperties));
+            LOG.log(Level.WARNING, String.format(MESSAGE_ERROR_PROPERTY_FILE, fileProperties));
         } catch (NumberFormatException e) {
-            LOG.warn(MESSAGE_ERROR_PORT);
+            LOG.log(Level.WARNING, MESSAGE_ERROR_PORT);
         }
     }
 }

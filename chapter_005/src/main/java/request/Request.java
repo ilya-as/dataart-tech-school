@@ -10,7 +10,7 @@ public class Request {
     private InputStream body;
     private String pathToFolder;
     private Map<String, String> metadata;
-    private Map<String, String> cookie = new HashMap<>();
+    private Map<String, String> cookie = new HashMap();
 
     public Request() {
     }
