@@ -12,9 +12,6 @@ public class Unit {
         this.damage = damage;
     }
 
-    public Unit() {
-    }
-
     public String getName() {
         return name;
     }

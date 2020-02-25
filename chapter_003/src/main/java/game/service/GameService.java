@@ -1,7 +1,6 @@
 package game.service;
 
 import game.model.Unit;
-import game.service.GameLog;
 
 public class GameService {
     private GameLog gameLog;
