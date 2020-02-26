@@ -35,6 +35,10 @@ public class RequestReader {
         String resource = firstLineArray[RESOURCE_METHOD_ARRAY_INDEX].substring(RESOURCE_START_READ_INDEX);
         resource = resource.replaceAll(REGEX_PATTERN_SLASH, REGEX_PATTERN_BACK_SLASH);
         Map<String, String> cookie = ServerUtils.getCookieFromHeader(metadata.get(REGEX_PATTERN_COOKIE_STRING));
+        if (!cookie.containsKey(ServerUtils.USER_ID)) {
+            UUID uuid = UUID.randomUUID();
+            cookie.put(ServerUtils.USER_ID, uuid.toString());
+        }
         return new Request(resource, method, inputStream, metadata, cookie, pathToFolder);
     }
 }

@@ -2,7 +2,6 @@ package request;
 
 import java.io.InputStream;
 import java.util.Map;
-import java.util.HashMap;
 
 public class Request {
     private String resource;
@@ -10,7 +9,7 @@ public class Request {
     private InputStream body;
     private String pathToFolder;
     private Map<String, String> metadata;
-    private Map<String, String> cookie = new HashMap();
+    private Map<String, String> cookie;
 
     public Request() {
     }

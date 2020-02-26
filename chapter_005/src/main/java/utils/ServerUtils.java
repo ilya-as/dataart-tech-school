@@ -8,7 +8,7 @@ public final class ServerUtils {
     public static final String REGEX_PATTERN_SPACE = " ";
     public static final String REGEX_PATTERN_COLON_SPACE = ": ";
     public static final String REGEX_PATTERN_SET_COOKE = "Set-Cookie: ";
-    public static final String COOKIE_KEY = "user_id";
+    public static final String USER_ID = "user_id";
     private static final String REGEX_PATTERN_SEMICOLON_SPACE = "; ";
     public static final String REGEX_PATTERN_EQUAL = "=";
     private static final int COOKIE_KEY_INDEX = 0;

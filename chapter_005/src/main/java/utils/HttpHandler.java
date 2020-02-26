@@ -1,16 +1,17 @@
 package utils;
 
-import java.util.logging.Level;
+import java.util.Date;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import request.Request;
 import responce.Response;
+import session.Session;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.time.Instant;
-import java.util.UUID;
 
 public class HttpHandler {
     private static final Logger LOG = Logger.getLogger(HttpHandler.class.getName());
@@ -22,8 +23,12 @@ public class HttpHandler {
     private final String HEADER_CONTENT_TYPE = "Content-Type";
     private final String VALUE_CONTENT_TYPE = "text/html; charset=UTF-8";
     private final String HEADER_DATE = "Date";
+    private final String SESSION_LOG_EXIST_USER = "Connected user with UserID=%s.Last visit was %s";
+    private final String SESSION_LOG_NEW_USER = "Connected new user with UserID=%s.Date first visit: %s";
+    private Map<String, Session> sessionContainer;
 
-    public HttpHandler() {
+    public HttpHandler(Map<String, Session> sessionContainer) {
+        this.sessionContainer = sessionContainer;
     }
 
     public void handle(Request request, Response response) {
@@ -33,7 +38,7 @@ public class HttpHandler {
             try {
                 fileInputStream = new FileInputStream(pathToFile);
             } catch (FileNotFoundException e) {
-                LOG.log(Level.WARNING, e.getMessage());
+                LOG.warning(e.getMessage());
             }
         }
         if (fileInputStream == null) {
@@ -47,8 +52,24 @@ public class HttpHandler {
         response.setProtocol(HTTP_PROTOCOL);
         response.addHeader(HEADER_CONTENT_TYPE, VALUE_CONTENT_TYPE);
         response.addHeader(HEADER_DATE, Instant.now().toString());
-        if (request.getCookie(ServerUtils.COOKIE_KEY) == null) {
-            response.addCookie(ServerUtils.COOKIE_KEY, UUID.randomUUID().toString());
+
+        String userID = request.getCookie(ServerUtils.USER_ID);
+        Session session = getOrCreateNewSession(userID);
+        String sessionLog = isUserExist(userID) ? SESSION_LOG_EXIST_USER : SESSION_LOG_NEW_USER;
+        LOG.info(String.format(sessionLog, session.getUserID(), session.getLastDate()));
+        session.setLastDate(new Date());
+        sessionContainer.put(userID, session);
+        response.addCookie(ServerUtils.USER_ID, userID);
+    }
+
+    private Session getOrCreateNewSession(String userID) {
+        if (isUserExist(userID)) {
+            return sessionContainer.get(userID);
         }
+        return new Session(userID);
+    }
+
+    private boolean isUserExist(String userID) {
+        return sessionContainer.containsKey(userID);
     }
 }

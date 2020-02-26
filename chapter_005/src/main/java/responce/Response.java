@@ -57,11 +57,12 @@ public class Response {
             buffer.append(entry.getKey() + ServerUtils.REGEX_PATTERN_COLON_SPACE
                     + entry.getValue() + ServerUtils.REQUEST_HEADERS_END_LINE);
         }
-        if (cookie.containsKey(ServerUtils.COOKIE_KEY)) {
+        if (cookie.containsKey(ServerUtils.USER_ID)) {
             buffer.append(ServerUtils.REGEX_PATTERN_SET_COOKE
-                    + ServerUtils.COOKIE_KEY
+                    + ServerUtils.USER_ID
                     + ServerUtils.REGEX_PATTERN_EQUAL
-                    + cookie.get(ServerUtils.COOKIE_KEY));
+                    + cookie.get(ServerUtils.USER_ID)
+                    + ServerUtils.REQUEST_HEADERS_END_LINE);
         }
         buffer.append(ServerUtils.REQUEST_HEADERS_END_LINE);
         return buffer.toString();
