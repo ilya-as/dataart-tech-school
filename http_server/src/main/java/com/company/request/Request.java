@@ -1,5 +1,6 @@
 package com.company.request;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.Map;
 
@@ -28,11 +29,16 @@ public class Request {
         return resource;
     }
 
+    public String getPathToFolder() {
+        return pathToFolder;
+    }
+
     public String getCookie(String cookieKey) {
         return cookie.get(cookieKey);
     }
 
     public String getFullPatch() {
-        return pathToFolder + resource;
+        File fullPatch = new File(new File(pathToFolder), resource);
+        return fullPatch.getAbsolutePath();
     }
 }
