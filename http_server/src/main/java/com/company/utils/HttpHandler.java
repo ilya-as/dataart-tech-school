@@ -24,7 +24,7 @@ public class HttpHandler {
     private final String HEADER_CONTENT_TYPE = "Content-Type";
     private final String VALUE_CONTENT_TYPE = "text/html; charset=UTF-8";
     private final String HEADER_DATE = "Date";
-    private final String SESSION_LOG_EXIST_USER = "Connected user with UserID=%s.Last visit was %s";
+    private final String SESSION_LOG_EXIST_USER = "Connected user with UserID=%s. Last visit was %s";
     private final String SESSION_LOG_NEW_USER = "Connected new user with UserID=%s.Date first visit: %s";
     private final Map<String, Session> sessionContainer;
 

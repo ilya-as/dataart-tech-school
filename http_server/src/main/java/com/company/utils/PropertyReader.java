@@ -26,10 +26,10 @@ public class PropertyReader {
             LogManager.getLogManager().readConfiguration(this.getClass().getClassLoader().getResourceAsStream(fileProperties));
             bufferSize = Integer.parseInt(LogManager.getLogManager().getProperty(PROPERTY_BUFFER_SIZE));
         } catch (IOException e) {
-            LOG.log(Level.WARNING, String.format(MESSAGE_ERROR_PROPERTY_FILE, fileProperties));
+            LOG.warning(String.format(MESSAGE_ERROR_PROPERTY_FILE, fileProperties));
             System.out.println(String.format(MESSAGE_ERROR_PROPERTY_FILE, fileProperties));
         } catch (NumberFormatException e) {
-            LOG.log(Level.WARNING, MESSAGE_ERROR_PORT);
+            LOG.warning(MESSAGE_ERROR_PORT);
         }
     }
 }

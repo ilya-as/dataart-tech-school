@@ -10,8 +10,8 @@ public class ArgsReader {
     private final int FIRST_ARGUMENT_INDEX = 0;
     private final int SECOND_ARGUMENT_INDEX = 1;
     private final int COUNT_ARGUMENTS = 2;
-    private final String ARGUMENTS_COUNT_ERROR = "Для старта сервера требуется 2 аргумента: 1) порт сервера 2)" +
-            " путь к папке с ресурсами";
+    private final String ARGUMENTS_COUNT_ERROR = "Для старта сервера требуется 2 аргумента: 1)путь к папке с ресурсами" +
+            "  2) порт сервера";
 
     public ArgsReader(String[] args) {
         this.args = args;

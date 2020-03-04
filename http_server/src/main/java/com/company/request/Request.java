@@ -38,7 +38,7 @@ public class Request {
     }
 
     public String getFullPatch() {
-        File fullPatch = new File(new File(pathToFolder), resource);
-        return fullPatch.getAbsolutePath();
+        File fileFullPatch = new File(new File(pathToFolder), resource);
+        return fileFullPatch.getAbsolutePath();
     }
 }
