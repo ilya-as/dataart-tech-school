@@ -1,4 +1,4 @@
-package utils;
+package com.company.utils;
 
 import java.io.*;
 import java.util.*;

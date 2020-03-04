@@ -1,6 +1,6 @@
-package request;
+package com.company.request;
 
-import utils.ServerUtils;
+import com.company.utils.ServerUtils;
 
 import java.util.*;
 

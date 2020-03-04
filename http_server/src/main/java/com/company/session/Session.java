@@ -1,4 +1,4 @@
-package session;
+package com.company.session;
 
 import java.util.Date;
 

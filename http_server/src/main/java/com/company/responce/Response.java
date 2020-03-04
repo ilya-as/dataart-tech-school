@@ -1,6 +1,6 @@
-package responce;
+package com.company.responce;
 
-import utils.ServerUtils;
+import com.company.utils.ServerUtils;
 
 import java.io.InputStream;
 import java.util.HashMap;

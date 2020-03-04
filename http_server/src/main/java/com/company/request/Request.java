@@ -1,4 +1,4 @@
-package request;
+package com.company.request;
 
 import java.io.InputStream;
 import java.util.Map;

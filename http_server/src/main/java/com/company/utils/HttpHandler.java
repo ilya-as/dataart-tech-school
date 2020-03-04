@@ -1,12 +1,12 @@
-package utils;
+package com.company.utils;
 
 import java.util.Date;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import request.Request;
-import responce.Response;
-import session.Session;
+import com.company.request.Request;
+import com.company.responce.Response;
+import com.company.session.Session;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -25,7 +25,7 @@ public class HttpHandler {
     private final String HEADER_DATE = "Date";
     private final String SESSION_LOG_EXIST_USER = "Connected user with UserID=%s.Last visit was %s";
     private final String SESSION_LOG_NEW_USER = "Connected new user with UserID=%s.Date first visit: %s";
-    private Map<String, Session> sessionContainer;
+    private final Map<String, Session> sessionContainer;
 
     public HttpHandler(Map<String, Session> sessionContainer) {
         this.sessionContainer = sessionContainer;
