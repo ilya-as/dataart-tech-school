@@ -38,6 +38,7 @@ public class StoreSQLTest {
 
     @After
     public void closeConnection() throws Exception {
+        connection.rollback();
         if (this.connection != null) {
             this.connection.close();
         }
@@ -53,8 +54,7 @@ public class StoreSQLTest {
             assertThat(rstSet.getString("email"), is("test@mail.ru"));
             assertThat(rstSet.getInt("id") > 0, is(true));
         }
-        connection.rollback();
-    }
+     }
 
     @Test
     public void update() throws SQLException {
@@ -73,7 +73,6 @@ public class StoreSQLTest {
             assertThat(resultSet.getString("email"), is("test@mail.ru"));
             assertThat(resultSet.next(), is(false));
         }
-        connection.rollback();
     }
 
     @Test
@@ -88,7 +87,6 @@ public class StoreSQLTest {
             resultSet = statement.executeQuery("SELECT name, email FROM users WHERE id =" + userId);
             assertThat(resultSet.next(), is(false));
         }
-        connection.rollback();
     }
 
     @Test
@@ -107,7 +105,6 @@ public class StoreSQLTest {
             e.printStackTrace();
         }
         assertThat(result.containsAll(expect), is(true));
-        connection.rollback();
     }
 }
 
