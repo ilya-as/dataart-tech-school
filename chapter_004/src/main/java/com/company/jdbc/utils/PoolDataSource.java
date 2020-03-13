@@ -8,19 +8,18 @@ import java.beans.PropertyVetoException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class PoolConnectionBuilder {
-    private ComboPooledDataSource dataSource;
-    private final String URL = "url";
-    private final String USERNAME = "username";
-    private final String PASSWORD = "password";
-    private final String DRIVER = "driver";
-    private final static Logger LOG = LogManager.getLogger(PoolConnectionBuilder.class);
-    private final Config config = new Config();
-    private final int MAX_POOL_SIZE = 20;
+public class PoolDataSource {
+    private static ComboPooledDataSource dataSource = new ComboPooledDataSource();
+    private final static String URL = "url";
+    private final static String USERNAME = "username";
+    private final static String PASSWORD = "password";
+    private final static String DRIVER = "driver";
+    private final static Logger LOG = LogManager.getLogger(PoolDataSource.class);
+    private final static Config config = new Config();
+    private final static int MAX_POOL_SIZE = 20;
 
-    public PoolConnectionBuilder() {
+    static {
         try {
-            dataSource = new ComboPooledDataSource();
             dataSource.setDriverClass(config.get(DRIVER));
             dataSource.setJdbcUrl(config.get(URL));
             dataSource.setUser(config.get(USERNAME));
@@ -31,7 +30,11 @@ public class PoolConnectionBuilder {
         }
     }
 
-    public Connection getConnection() throws SQLException {
+    public static Connection getConnection() throws SQLException {
         return dataSource.getConnection();
+    }
+
+    private PoolDataSource() {
+
     }
 }
