@@ -10,7 +10,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StoreSQL implements AutoCloseable {
+public class StoreSQL {
     private final static Logger LOG = LogManager.getLogger(StoreSQL.class);
     private final String QUERY_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS users (id  serial primary key not null,  " +
             "name TEXT,email TEXT)";
@@ -19,24 +19,14 @@ public class StoreSQL implements AutoCloseable {
     private final String QUERY_GET_ALL = "SELECT * FROM users";
     private final String QUERY_DELETE_USER = "DELETE FROM users WHERE id = ?";
     private final String FIND_BY_ID = "SELECT * FROM users WHERE id=?";
-    private Connection connection;
-
-    public StoreSQL(Connection connection) {
-        this.connection = connection;
-        prepareDB();
-    }
 
     public StoreSQL() {
-        try {
-            this.connection = PoolDataSource.getConnection();
-        } catch (SQLException e) {
-            LOG.error(e.getMessage(), e);
-        }
         prepareDB();
     }
 
     private void prepareDB() {
-        try (Statement statement = connection.createStatement()) {
+        try (Connection connection = PoolDataSource.getConnection();
+             Statement statement = connection.createStatement()) {
             statement.executeUpdate(QUERY_CREATE_TABLE);
         } catch (SQLException e) {
             LOG.error(e.getMessage(), e);
@@ -44,13 +34,14 @@ public class StoreSQL implements AutoCloseable {
     }
 
     public User add(User user) {
-        try (PreparedStatement statement = connection.prepareStatement(QUERY_ADD_USER, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection connection = PoolDataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(QUERY_ADD_USER, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, user.getName());
             statement.setString(2, user.getEmail());
             statement.executeUpdate();
             ResultSet generatedKeys = statement.getGeneratedKeys();
             if (generatedKeys.next()) {
-                user.setId(generatedKeys.getInt(1));
+                user.setId(generatedKeys.getInt("id"));
             }
         } catch (SQLException e) {
             LOG.error(e.getMessage(), e);
@@ -59,7 +50,8 @@ public class StoreSQL implements AutoCloseable {
     }
 
     public void update(User user) {
-        try (PreparedStatement statement = connection.prepareStatement(QUERY_UPDATE_USER)) {
+        try (Connection connection = PoolDataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(QUERY_UPDATE_USER)) {
             statement.setString(1, user.getName());
             statement.setString(2, user.getEmail());
             statement.setInt(3, user.getId());
@@ -70,7 +62,8 @@ public class StoreSQL implements AutoCloseable {
     }
 
     public void delete(int userId) {
-        try (PreparedStatement statement = connection.prepareStatement(QUERY_DELETE_USER)) {
+        try (Connection connection = PoolDataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(QUERY_DELETE_USER)) {
             statement.setInt(1, userId);
             statement.execute();
         } catch (SQLException e) {
@@ -80,7 +73,8 @@ public class StoreSQL implements AutoCloseable {
 
     public List<User> getAll() {
         List<User> users = new ArrayList<>();
-        try (Statement statement = connection.createStatement()) {
+        try (Connection connection = PoolDataSource.getConnection();
+             Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(QUERY_GET_ALL);
             while (resultSet.next()) {
                 users.add(userBuilder(resultSet));
@@ -93,7 +87,8 @@ public class StoreSQL implements AutoCloseable {
 
     public User findById(int userId) {
         User user = null;
-        try (PreparedStatement statement = connection.prepareStatement(FIND_BY_ID)) {
+        try (Connection connection = PoolDataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(FIND_BY_ID)) {
             statement.setInt(1, userId);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -113,14 +108,5 @@ public class StoreSQL implements AutoCloseable {
         return user;
     }
 
-    @Override
-    public void close() {
-        if (this.connection != null) {
-            try {
-                this.connection.close();
-            } catch (SQLException e) {
-                LOG.error(e.getMessage(), e);
-            }
-        }
-    }
+
 }

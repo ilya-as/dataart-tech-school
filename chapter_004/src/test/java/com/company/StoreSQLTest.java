@@ -24,17 +24,20 @@ public class StoreSQLTest {
     private User second = new User("test", "test@mail.ru");
     private final String QUERY_GET_USER_TEST_BY_NAME = "SELECT * FROM users WHERE name = 'test'";
     private final String QUERY_SELECT_USER_ID = "SELECT id FROM users WHERE name = 'test'";
-
+    private final String QUERY_CLEAR_TEST_USER = "DELETE FROM users WHERE name = 'test'";
 
     @Before
     public void setUp() throws SQLException {
         this.connection = PoolDataSource.getConnection();
         this.connection.setAutoCommit(false);
-        this.testStore = new StoreSQL(connection);
+        this.testStore = new StoreSQL();
     }
 
     @After
-    public void closeConnection() throws Exception {
+    public void clear() throws Exception {
+        try (Statement st = this.connection.createStatement()) {
+            st.execute(QUERY_CLEAR_TEST_USER);
+        }
         this.connection.rollback();
         if (this.connection != null) {
             this.connection.close();
@@ -57,10 +60,8 @@ public class StoreSQLTest {
     @Test
     public void update() throws SQLException {
         int id = testStore.add(first).getId();
-        first.setName("test2");
         first.setEmail("test2@mail.ru");
         testStore.update(first);
-        assertThat(testStore.findById(id).getName(), is("test2"));
         assertThat(testStore.findById(id).getEmail(), is("test2@mail.ru"));
     }
 
