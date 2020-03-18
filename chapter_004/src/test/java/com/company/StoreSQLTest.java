@@ -47,7 +47,6 @@ public class StoreSQLTest {
     @Test
     public void add() throws SQLException {
         this.testStore.add(this.first);
-
         try (PreparedStatement statement = connection.prepareStatement(QUERY_GET_USER_TEST_BY_NAME)) {
             ResultSet rstSet = statement.executeQuery();
             rstSet.next();
